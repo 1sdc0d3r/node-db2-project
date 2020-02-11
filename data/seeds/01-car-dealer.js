@@ -1,10 +1,10 @@
 exports.seed = function(knex) {
   // Deletes ALL existing entries
-  return knex("carDealer")
+  return knex("cars")
     .truncate()
     .then(function() {
       // Inserts seed entries
-      return knex("carDealer").insert([
+      return knex("cars").insert([
         {
           id: 1,
           vin: "vin1",
@@ -28,9 +28,18 @@ exports.seed = function(knex) {
           vin: "vin3",
           make: "Alfa Romero",
           model: "Stelvio",
-          mileage: "13000",
+          mileage: 13000,
           transmissionType: "automatic",
           titleStatus: "clean"
+        },
+        {
+          id: 4,
+          vin: "vin4",
+          make: "Ford",
+          model: "Raptor",
+          mileage: 7000,
+          transmissionType: "automatic",
+          titleStatus: "salvaged"
         }
       ]);
     });
