@@ -11,16 +11,18 @@ const port = process.env.PORT || 8000;
 
 server.get("/cars", (req, res) => {
   console.log("GET");
-  cars.find().then(cars => res.status(200).send(cars));
-  // .catch(err =>
-  //   res.status(500).send({ message: "Unable to retrieve cars", error: err })
-  // );
+  cars
+    .find()
+    .then(cars => res.status(200).send(cars))
+    .catch(err =>
+      res.status(500).send({ message: "Unable to retrieve cars", error: err })
+    );
 });
 
 server.post("/cars", (req, res) => {
-  console.log("POST", req.body);
-  cars("cars")
-    .insert(req.body)
+  // console.log("POST", req.body);
+  cars
+    .add(req.body)
     .then(car =>
       res
         .status(201)
@@ -30,28 +32,33 @@ server.post("/cars", (req, res) => {
       res.status(500).send({ message: "Unable to add car.", error: err })
     );
 });
-server.put("/cars:id", (req, res) => {
+
+server.put("/cars/:id", (req, res) => {
   const carId = req.params.id;
   const update = req.body;
-  console.log(`PUT at ID:${carId}`, update);
-  cars("cars")
-    .where({ id: carId })
-    .update(update)
-    .then(
-      res.status(200)
-      // .send({ message: "Successfully updated car" }))
-      // .catch(err =>
-      //   res
-      //     .status(500)
-      //     .send({ message: "Not able to modify car data", error: err })
+  // console.log(`PUT at ID:${carId}`, update);
+  cars
+    .updateCar(carId, update)
+    .then(count =>
+      res
+        .status(200)
+        .send({ message: "Successfully updated car", count: count })
+    )
+    .catch(err =>
+      res
+        .status(500)
+        .send({ message: "Not able to modify car data", error: err })
     );
 });
-server.delete("/cars:id", (req, res) => {
+
+server.delete("/cars/:id", (req, res) => {
   console.log("DELETE");
-  cars("cars")
-    .where({ id: req.params.id })
-    .then(resp =>
-      res.status(200).send({ message: "Successfully deleted car", resp: resp })
+  cars
+    .remove(req.params.id)
+    .then(count =>
+      res
+        .status(200)
+        .send({ message: "Successfully deleted car", count: count })
     )
     .catch(err =>
       res
